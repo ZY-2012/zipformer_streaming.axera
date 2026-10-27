@@ -1,0 +1,62 @@
+{
+  "input": "/workspace/export/model.onnx",
+  "output_dir": "/workspace/compile",
+  "output_name": "model.axmodel",
+  "work_dir": "/workspace/compile/work",
+  "model_type": "ONNX",
+  "target_hardware": "AX650",
+  "npu_mode": "NPU3",
+  "input_shapes": "encoder_out:1x512,decoder_out:1x512",
+  "onnx_opt": {
+    "disable_onnx_optimization": false,
+    "enable_onnxsim": true,
+    "model_check": true
+  },
+  "quant": {
+    "input_configs": [
+      {
+        "tensor_name": "encoder_out",
+        "calibration_dataset": "/workspace/export/calib_data/encoder_out.zip",
+        "calibration_size": -1,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "decoder_out",
+        "calibration_dataset": "/workspace/export/calib_data/decoder_out.zip",
+        "calibration_size": -1,
+        "calibration_format": "Numpy"
+      }
+    ],
+    "calibration_method": "MinMax",
+    "precision_analysis": true,
+    "precision_analysis_method": "EndToEnd",
+    "highest_mix_precision": false,
+    "layer_configs": [
+      {
+        "start_tensor_names": [
+          "DEFAULT"
+        ],
+        "end_tensor_names": [
+          "DEFAULT"
+        ],
+        "data_type": "U16"
+      },
+      {
+        "op_type": "Pow",
+        "data_type": "U8"
+      }
+    ],
+    "enable_smooth_quant": true,
+    "conv_bias_data_type": "FP32",
+    "disable_auto_refine_scale": true,
+    "transformer_opt_level": 0
+  },
+  "input_processors": [
+    {
+      "tensor_name": "DEFAULT"
+    }
+  ],
+  "compiler": {
+    "check": 0
+  }
+}

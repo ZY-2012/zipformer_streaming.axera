@@ -1,0 +1,84 @@
+{
+  "model": "zipformer_streaming",
+  "checkpoint": "/data/shared/huyuan/ASR/ZF/k2fsa-zipformer-chinese-english-mixed.HF/exp/pretrained.pt",
+  "tokens": "/data/shared/huyuan/ASR/ZF/k2fsa-zipformer-chinese-english-mixed.HF/data/lang_char_bpe/tokens.txt",
+  "decode_chunk_len": 32,
+  "segment_frames": 39,
+  "chunk_shift": 32,
+  "num_encoder_layers": [
+    2,
+    4,
+    3,
+    2,
+    4
+  ],
+  "feedforward_dims": [
+    1024,
+    1024,
+    1536,
+    1536,
+    1024
+  ],
+  "nhead": [
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "encoder_dims": [
+    384,
+    384,
+    384,
+    384,
+    384
+  ],
+  "attention_dims": [
+    192,
+    192,
+    192,
+    192,
+    192
+  ],
+  "encoder_unmasked_dims": [
+    256,
+    256,
+    256,
+    256,
+    256
+  ],
+  "zipformer_downsampling_factors": [
+    1,
+    2,
+    4,
+    8,
+    2
+  ],
+  "cnn_module_kernels": [
+    31,
+    31,
+    31,
+    31,
+    31
+  ],
+  "num_left_chunks": 4,
+  "short_chunk_size": 50,
+  "left_context_len": [
+    64,
+    32,
+    16,
+    8,
+    32
+  ],
+  "encoder_dim": 384,
+  "decoder_dim": 512,
+  "joiner_dim": 512,
+  "context_size": 2,
+  "vocab_size": 6254,
+  "blank_id": 0,
+  "onnx": {
+    "encoder": "/data/shared/huyuan/ASR/ZF/streaming/export/onnx/encoder-chunk32.sim.onnx",
+    "decoder": "/data/shared/huyuan/ASR/ZF/streaming/export/onnx/decoder-chunk32.sim.onnx",
+    "joiner": "/data/shared/huyuan/ASR/ZF/streaming/export/onnx/joiner-chunk32.sim.onnx"
+  }
+}

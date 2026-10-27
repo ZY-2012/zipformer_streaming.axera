@@ -1,0 +1,17 @@
+[
+ "op_152:onnx.FullyConnected",
+ "op_153:onnx.FullyConnected",
+ "op_159:onnx.FullyConnected",
+ "op_160:onnx.FullyConnected",
+ "op_161:onnx.FullyConnected",
+ "op_162:onnx.FullyConnected",
+ "op_163:onnx.FullyConnected",
+ "op_164:onnx.FullyConnected",
+ "op_165:onnx.FullyConnected",
+ "op_166:onnx.FullyConnected",
+ "op_154:onnx.FullyConnected",
+ "op_155:onnx.FullyConnected",
+ "op_156:onnx.FullyConnected",
+ "op_157:onnx.FullyConnected",
+ "op_158:onnx.FullyConnected"
+]

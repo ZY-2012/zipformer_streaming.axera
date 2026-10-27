@@ -1,0 +1,291 @@
+{
+  "input": "/workspace/export/model.onnx",
+  "output_dir": "/workspace/compile",
+  "output_name": "model.axmodel",
+  "work_dir": "/workspace/compile/work",
+  "model_type": "ONNX",
+  "target_hardware": "AX650",
+  "npu_mode": "NPU3",
+  "input_shapes": "x:1x39x80,cached_len_0:2x1,cached_len_1:4x1,cached_len_2:3x1,cached_len_3:2x1,cached_len_4:4x1,cached_avg_0:2x1x384,cached_avg_1:4x1x384,cached_avg_2:3x1x384,cached_avg_3:2x1x384,cached_avg_4:4x1x384,cached_key_0:2x64x1x192,cached_key_1:4x32x1x192,cached_key_2:3x16x1x192,cached_key_3:2x8x1x192,cached_key_4:4x32x1x192,cached_val_0:2x64x1x96,cached_val_1:4x32x1x96,cached_val_2:3x16x1x96,cached_val_3:2x8x1x96,cached_val_4:4x32x1x96,cached_val2_0:2x64x1x96,cached_val2_1:4x32x1x96,cached_val2_2:3x16x1x96,cached_val2_3:2x8x1x96,cached_val2_4:4x32x1x96,cached_conv1_0:2x1x384x30,cached_conv1_1:4x1x384x30,cached_conv1_2:3x1x384x30,cached_conv1_3:2x1x384x30,cached_conv1_4:4x1x384x30,cached_conv2_0:2x1x384x30,cached_conv2_1:4x1x384x30,cached_conv2_2:3x1x384x30,cached_conv2_3:2x1x384x30,cached_conv2_4:4x1x384x30",
+  "onnx_opt": {
+    "disable_onnx_optimization": false,
+    "enable_onnxsim": true,
+    "model_check": true
+  },
+  "quant": {
+    "input_configs": [
+      {
+        "tensor_name": "x",
+        "calibration_dataset": "/workspace/export/calib_data/x.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_len_0",
+        "calibration_dataset": "/workspace/export/calib_data/cached_len_0.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_len_1",
+        "calibration_dataset": "/workspace/export/calib_data/cached_len_1.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_len_2",
+        "calibration_dataset": "/workspace/export/calib_data/cached_len_2.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_len_3",
+        "calibration_dataset": "/workspace/export/calib_data/cached_len_3.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_len_4",
+        "calibration_dataset": "/workspace/export/calib_data/cached_len_4.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_avg_0",
+        "calibration_dataset": "/workspace/export/calib_data/cached_avg_0.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_avg_1",
+        "calibration_dataset": "/workspace/export/calib_data/cached_avg_1.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_avg_2",
+        "calibration_dataset": "/workspace/export/calib_data/cached_avg_2.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_avg_3",
+        "calibration_dataset": "/workspace/export/calib_data/cached_avg_3.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_avg_4",
+        "calibration_dataset": "/workspace/export/calib_data/cached_avg_4.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_key_0",
+        "calibration_dataset": "/workspace/export/calib_data/cached_key_0.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_key_1",
+        "calibration_dataset": "/workspace/export/calib_data/cached_key_1.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_key_2",
+        "calibration_dataset": "/workspace/export/calib_data/cached_key_2.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_key_3",
+        "calibration_dataset": "/workspace/export/calib_data/cached_key_3.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_key_4",
+        "calibration_dataset": "/workspace/export/calib_data/cached_key_4.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val_0",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val_0.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val_1",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val_1.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val_2",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val_2.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val_3",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val_3.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val_4",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val_4.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val2_0",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val2_0.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val2_1",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val2_1.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val2_2",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val2_2.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val2_3",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val2_3.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_val2_4",
+        "calibration_dataset": "/workspace/export/calib_data/cached_val2_4.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv1_0",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv1_0.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv1_1",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv1_1.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv1_2",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv1_2.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv1_3",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv1_3.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv1_4",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv1_4.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv2_0",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv2_0.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv2_1",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv2_1.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv2_2",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv2_2.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv2_3",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv2_3.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      },
+      {
+        "tensor_name": "cached_conv2_4",
+        "calibration_dataset": "/workspace/export/calib_data/cached_conv2_4.zip",
+        "calibration_size": 1024,
+        "calibration_format": "Numpy"
+      }
+    ],
+    "calibration_method": "MinMax",
+    "precision_analysis": true,
+    "precision_analysis_method": "EndToEnd",
+    "highest_mix_precision": false,
+    "layer_configs": [
+      {
+        "start_tensor_names": [
+          "DEFAULT"
+        ],
+        "end_tensor_names": [
+          "DEFAULT"
+        ],
+        "data_type": "U16"
+      },
+      {
+        "op_type": "Pow",
+        "data_type": "U8"
+      },
+      {
+        "op_type": "Mul",
+        "data_type": "FP32",
+        "output_data_type": "FP32"
+      },
+      {
+        "layer_names": [
+          "op_152:onnx.FullyConnected",
+          "op_153:onnx.FullyConnected",
+          "op_159:onnx.FullyConnected",
+          "op_160:onnx.FullyConnected",
+          "op_161:onnx.FullyConnected",
+          "op_162:onnx.FullyConnected",
+          "op_163:onnx.FullyConnected",
+          "op_164:onnx.FullyConnected",
+          "op_165:onnx.FullyConnected",
+          "op_166:onnx.FullyConnected",
+          "op_154:onnx.FullyConnected",
+          "op_155:onnx.FullyConnected",
+          "op_156:onnx.FullyConnected",
+          "op_157:onnx.FullyConnected",
+          "op_158:onnx.FullyConnected"
+        ],
+        "data_type": "FP32"
+      }
+    ],
+    "enable_smooth_quant": true,
+    "conv_bias_data_type": "FP32",
+    "disable_auto_refine_scale": true,
+    "transformer_opt_level": 0
+  },
+  "input_processors": [
+    {
+      "tensor_name": "DEFAULT"
+    }
+  ],
+  "compiler": {
+    "check": 0
+  }
+}

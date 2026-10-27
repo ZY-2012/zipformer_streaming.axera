@@ -76,7 +76,6 @@ Zipformer-Streaming.AXERA/
 │   ├── prepare_calib.py
 │   ├── prepare_tasks.py
 │   ├── compile_models.py
-│   ├── configs/         # encoder / decoder / joiner Pulsar2 配置
 │   ├── data/            # tokens.txt（上游 token 表）
 │   └── README.md
 ├── python/              # Python 板端推理（axengine + kaldi-native-fbank）

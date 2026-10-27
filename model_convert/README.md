@@ -86,7 +86,9 @@ python model_convert/compile_models.py --models decoder,joiner,encoder
 - `compile/custom_config.json`（由 `prepare_tasks.py` 根据 ONNX 输入自动生成）
 - `compile/<model>.axmodel`
 
-Pulsar2 关键配置（`configs/` 中保留了最终版本的样例）：
+Pulsar2 配置由 `prepare_tasks.py` 根据 ONNX 输入自动写入
+`build/magnetar_tasks/<model>/compile/custom_config.json`（`/workspace/...`
+是 Pulsar2 容器内路径）：
 
 | 模型 | 配置 |
 |------|------|

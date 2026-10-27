@@ -121,8 +121,12 @@ class StreamingZipformer:
     def decode_features(self, feats: np.ndarray) -> dict:
         self.reset()
         n = feats.shape[0]
-        for start in range(0, max(n - self.T + 1, 0), self.chunk):
-            seg = np.ascontiguousarray(feats[start:start + self.T], dtype=np.float32)
+        for start in range(0, n, self.chunk):
+            seg = feats[start:start + self.T]
+            if seg.shape[0] < self.T:
+                seg = np.concatenate(
+                    [seg, np.zeros((self.T - seg.shape[0], 80), dtype=np.float32)], axis=0)
+            seg = np.ascontiguousarray(seg, dtype=np.float32)
             enc_out = self.run_encoder(seg[None, :, :])
             for t in range(enc_out.shape[1]):
                 cur = enc_out[:, t:t + 1, :].reshape(1, -1).astype(np.float32)

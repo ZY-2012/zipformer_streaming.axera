@@ -127,6 +127,34 @@ bash cpp/build_ax650.sh
 
 C++ 只接受 16 kHz 单声道 16-bit PCM WAV；其他格式先重采样。
 
+## 示例输出（AX650N 实测）
+
+```bash
+./cpp/bin/zipformer_asr_ax650 --models-dir models --tokens models/tokens.txt \
+    --audio-dir samples
+```
+
+| wav | 识别结果 |
+|-----|----------|
+| `samples/0.wav` | 昨天是 MONDAY TODAY IS礼拜二 THE DAY AFTER TOMORROW是星期三 |
+| `samples/1.wav` | 这是第一种第二种叫呃与 ALWAYS ALWAYS ALWAYS是什么意思啊 |
+| `samples/2.wav` | 这个是频繁的啊不认识记下来 FREQUENTLY频繁的 |
+| `samples/3.wav` | 第一句是个什么时态加了 ES是一般现在时态写上去 |
+| `samples/46.wav` | 你好石头把厨房扫脱下 |
+| `samples/demo.wav` | 甚至出现交易几乎停滞的情况 |
+
+Python：
+
+```bash
+python3 python/streaming_asr.py --model-dir models --tokens models/tokens.txt \
+    --wav samples/0.wav --stats
+# 0.wav: 昨天是 MONDAY TODAY IS礼拜二 THE DAY AFTER TOMORROW是星期三
+#   load=1.207s infer=0.642s audio=10.35s rtf=0.062
+```
+
+> 3.wav 是公开测试中的难例，与 FP32 参考相比尾部有 4 个 token 差异；
+> 其余样本与 FP32 参考均为 0–1 token 差异。
+
 ## 模型转换
 
 完整步骤见 [model_convert/README.md](model_convert/README.md)：

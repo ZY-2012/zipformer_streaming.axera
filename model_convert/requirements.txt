@@ -1,0 +1,6 @@
+numpy
+onnx>=1.19
+onnxruntime>=1.23
+onnxsim
+torch==2.8.0
+torchaudio==2.8.0

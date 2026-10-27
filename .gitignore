@@ -5,22 +5,15 @@ __pycache__/
 *.pyc
 *.log
 
-# large generated artifacts
-export/onnx/
-calib/datasets/
-magnetar_tasks/*/export/model.onnx
-magnetar_tasks/*/export/calib_data/
-magnetar_tasks/*/compile/
-magnetar_tasks/*/cache/
-magnetar_tasks_smoke/
-runtime/cpp/toolchains/
-runtime/cpp/build/
-runtime/cpp/bin/
-runtime/models_ax650/
-board_validate/
-
-# generated task trees / releases / board eval
-magnetar_tasks*/
-board_validate*/
+# downloaded upstream weights / generated artifacts
+origin/
+build/
+reports/
 release/
-runtime/models_ax650*/
+board_validate*/
+magnetar_tasks*/
+models/*.axmodel
+
+# local toolchains / build trees (prebuilt cpp/bin is committed)
+cpp/toolchains/
+cpp/build/

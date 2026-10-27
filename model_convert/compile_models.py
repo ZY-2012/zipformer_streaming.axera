@@ -9,11 +9,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import sys
 from pathlib import Path
 
-MAGNETAR_ROOT = Path("/data/shared/huyuan/Magnetar")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+MAGNETAR_ROOT = Path(os.environ.get("MAGNETAR_ROOT", PROJECT_ROOT / "Magnetar"))
+if not (MAGNETAR_ROOT / "magnetar").is_dir():
+    raise SystemExit(
+        "Magnetar not found. Clone https://github.com/AXERA-TECH/Magnetar "
+        f"next to this project or set MAGNETAR_ROOT (current: {MAGNETAR_ROOT})"
+    )
 sys.path.insert(0, str(MAGNETAR_ROOT))
 
 from magnetar.stages import compile as mcompile  # noqa: E402
@@ -32,8 +39,9 @@ _TIMEOUT = 7200
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--task-root", default="/data/shared/huyuan/ASR/ZF/streaming/magnetar_tasks")
-    ap.add_argument("--image", default="docker-registry.aitsw.axera-tech.com/pulsar2:7.0")
+    ap.add_argument("--task-root", default=str(PROJECT_ROOT / "build" / "magnetar_tasks"))
+    ap.add_argument("--image", default=os.environ.get(
+        "PULSAR2_IMAGE", "docker-registry.aitsw.axera-tech.com/pulsar2:7.0"))
     ap.add_argument("--models", default="decoder,joiner,encoder")
     ap.add_argument("--precision", default="U16", choices=["U16", "U8"])
     ap.add_argument("--timeout", type=int, default=7200)

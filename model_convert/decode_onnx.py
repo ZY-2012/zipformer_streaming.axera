@@ -115,8 +115,9 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=0)
     args = ap.parse_args()
 
-    cfg = json.loads(Path(args.config).read_text(encoding="utf-8"))
-    od = Path(args.onnx_dir) if args.onnx_dir else Path(cfg["onnx"]["encoder"]).parent
+    cfg_path = Path(args.config)
+    cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
+    od = Path(args.onnx_dir) if args.onnx_dir else cfg_path.parent
     enc_path = args.encoder or str(od / Path(cfg["onnx"]["encoder"]).name)
     dec_path = args.decoder or str(od / Path(cfg["onnx"]["decoder"]).name)
     join_path = args.joiner or str(od / Path(cfg["onnx"]["joiner"]).name)

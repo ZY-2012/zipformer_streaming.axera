@@ -33,7 +33,7 @@
 #define AXERA_TARGET_NAME "AXERA"
 #endif
 #ifndef DEFAULT_MODELS_DIR
-#define DEFAULT_MODELS_DIR "inputs/axmodels_650N"
+#define DEFAULT_MODELS_DIR "models"
 #endif
 
 namespace {
@@ -54,7 +54,7 @@ double ElapsedSeconds(Clock::time_point begin, Clock::time_point end) {
 
 struct Args {
   std::string models_dir = DEFAULT_MODELS_DIR;
-  std::string tokens = "inputs/lang_char_bpe/tokens.txt";
+  std::string tokens = "models/tokens.txt";
   std::string audio;
   std::string audio_dir;
 };
@@ -308,7 +308,7 @@ std::vector<std::string> ListWavFiles(const Args &args) {
     files.push_back(args.audio);
     return files;
   }
-  const std::string dir = args.audio_dir.empty() ? "inputs/test_wavs"
+  const std::string dir = args.audio_dir.empty() ? "samples"
                                                  : args.audio_dir;
   std::string listing =
       "find '" + dir + "' -maxdepth 1 -type f -name '*.wav' | sort";

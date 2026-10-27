@@ -18,6 +18,8 @@ import onnxruntime as ort
 import torch
 import torchaudio
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
 
 def fbank(wav: torch.Tensor, sr: int) -> np.ndarray:
     if sr != 16000:
@@ -51,12 +53,9 @@ def zero_states(sess) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--onnx-dir", default="/data/shared/huyuan/ASR/ZF/streaming/export/onnx")
-    ap.add_argument("--out-dir", default="/data/shared/huyuan/ASR/ZF/streaming/board_validate")
-    ap.add_argument("--wavs", default=(
-        "/data/shared/huyuan/ASR/ZF/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20.HF/test_wavs/*.wav,"
-        "/data/shared/huyuan/ASR/ZF/zipformer.HF/inputs/test_wavs/*.wav"
-    ))
+    ap.add_argument("--onnx-dir", default=str(PROJECT_ROOT / "build" / "onnx"))
+    ap.add_argument("--out-dir", default=str(PROJECT_ROOT / "build" / "board_validate"))
+    ap.add_argument("--wavs", default=str(PROJECT_ROOT / "samples" / "*.wav"))
     ap.add_argument("--limit", type=int, default=12)
     args = ap.parse_args()
 

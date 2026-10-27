@@ -9,7 +9,7 @@ Streaming recipe: pruned_transducer_stateless7_streaming
   - batch is fixed to 1 so every input/output dim is static
 
 This script is intentionally k2/lhotse free: it only needs torch + onnx +
-onnxsim and the vendored model code in export/model_code.
+onnxsim and the vendored model code in model_convert/model_code.
 """
 from __future__ import annotations
 
@@ -349,8 +349,8 @@ def main() -> None:
     }
     cfg = {
         "model": "zipformer_streaming",
-        "checkpoint": str(Path(args.pt_model).resolve()),
-        "tokens": str(Path(args.tokens).resolve()),
+        "checkpoint": str(args.pt_model),
+        "tokens": str(args.tokens),
         "decode_chunk_len": args.chunk_len,
         "segment_frames": args.chunk_len + 7,
         "chunk_shift": args.chunk_len,
@@ -362,7 +362,7 @@ def main() -> None:
         "context_size": 2,
         "vocab_size": vocab_size,
         "blank_id": blank_id,
-        "onnx": {k: str(v.resolve()) for k, v in sim_files.items()},
+        "onnx": {k: Path(v).name for k, v in sim_files.items()},
     }
     (out_dir / "model_config.json").write_text(json.dumps(cfg, indent=2), encoding="utf-8")
     print(json.dumps(cfg, indent=2))

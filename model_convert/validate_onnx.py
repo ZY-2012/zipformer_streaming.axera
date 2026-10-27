@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
 """Validate the re-exported static ONNX against the original pfluo TorchScript
-traces (the ground truth for these weights) and document the checkpoint
-difference vs the older sherpa-onnx 2023-02-20 model."""
+traces (the ground truth for these weights)."""
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
 
 import numpy as np
-import onnx
 import onnxruntime as ort
 import torch
-from onnx import numpy_helper
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
-PF = Path("/data/shared/huyuan/ASR/ZF/k2fsa-zipformer-chinese-english-mixed.HF")
-SHERPA = Path("/data/shared/huyuan/ASR/ZF/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20.HF")
 
 STATE_NAMES = (
     [f"cached_len_{i}" for i in range(5)]
@@ -55,30 +49,20 @@ def zero_states(s: ort.InferenceSession) -> dict:
     return out
 
 
-def initializer_cosine(a: Path, b: Path) -> dict:
-    def load(p):
-        m = onnx.load(str(p))
-        return {i.name: numpy_helper.to_array(i) for i in m.graph.initializer}
-    ia, ib = load(a), load(b)
-    out = {}
-    for k in ia:
-        if k in ib and ia[k].shape == ib[k].shape and ia[k].ndim >= 2:
-            out[k] = cos(ia[k], ib[k])
-    return out
-
-
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--onnx-dir", default=str(HERE / "onnx"))
-    ap.add_argument("--report", default=str(REPO / "reports" / "export_validate.md"))
+    ap.add_argument("--origin-dir", default=str(REPO / "origin"))
+    ap.add_argument("--onnx-dir", default=str(REPO / "build" / "onnx"))
+    ap.add_argument("--report", default=str(REPO / "build" / "reports" / "export_validate.md"))
     args = ap.parse_args()
     od = Path(args.onnx_dir)
-    cfg = json.loads((od / "model_config.json").read_text(encoding="utf-8"))
+    origin = Path(args.origin_dir)
 
-    ck = torch.load(PF / "exp/pretrained.pt", map_location="cpu", weights_only=False)["model"]
-    dec = torch.jit.load(str(PF / "exp/decoder_jit_trace.pt"), map_location="cpu").eval()
-    joi = torch.jit.load(str(PF / "exp/joiner_jit_trace.pt"), map_location="cpu").eval()
-    enc = torch.jit.load(str(PF / "exp/encoder_jit_trace.pt"), map_location="cpu").eval()
+    ck = torch.load(origin / "exp/pretrained.pt", map_location="cpu",
+                    weights_only=False)["model"]
+    dec = torch.jit.load(str(origin / "exp/decoder_jit_trace.pt"), map_location="cpu").eval()
+    joi = torch.jit.load(str(origin / "exp/joiner_jit_trace.pt"), map_location="cpu").eval()
+    enc = torch.jit.load(str(origin / "exp/encoder_jit_trace.pt"), map_location="cpu").eval()
     enc_proj_w = ck["joiner.encoder_proj.weight"].detach().numpy()
     enc_proj_b = ck["joiner.encoder_proj.bias"].detach().numpy()
     dec_proj_w = ck["joiner.decoder_proj.weight"].detach().numpy()
@@ -142,9 +126,6 @@ def main() -> None:
         rows.append(("logit", ours.shape, cos(ref, ours), 0.0))
 
     worst = min(r[2] for r in rows)
-    emb = initializer_cosine(od / "decoder-chunk32.sim.onnx",
-                             SHERPA / "decoder-epoch-99-avg-1.onnx")
-    off_note = "\n".join(f"- {k}: {v:.4f}" for k, v in emb.items())
 
     lines = [
         "# Streaming zipformer static ONNX validation",
@@ -158,15 +139,8 @@ def main() -> None:
         "|---|---|---|",
     ] + [f"| {n} | {tuple(s)} | {c:.10f} |" for n, s, c, _ in rows] + [
         "",
-        "## Note: sherpa-onnx 2023-02-20 is a different checkpoint",
-        "",
-        "The public sherpa-onnx model is described as coming from pfluo, but its",
-        "weights do not match the current pfluo `pretrained.pt` (the pfluo jit",
-        "traces match our export at cosine 1.0). Decoder initializer cosines:",
-        "",
-        off_note,
-        "",
-        "Therefore the sherpa ONNX is not used as a weight-level reference.",
+        "The `sherpa-onnx-...-2023-02-20` checkpoint is a different (older)",
+        "pfluo export and is not used as a weight-level reference.",
     ]
     report = Path(args.report)
     report.parent.mkdir(parents=True, exist_ok=True)

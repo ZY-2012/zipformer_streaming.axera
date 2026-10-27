@@ -115,13 +115,13 @@ def link_or_copy(src: Path, dst: Path) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--root", default="/data/shared/huyuan/ASR/ZF/streaming")
+    ap.add_argument("--root", default=str(Path(__file__).resolve().parents[1]))
     ap.add_argument("--chunk-tag", default="chunk32")
     args = ap.parse_args()
     root = Path(args.root)
-    onnx_dir = root / "export" / "onnx"
-    calib_dir = root / "calib" / "datasets"
-    tasks_root = root / "magnetar_tasks"
+    onnx_dir = root / "build" / "onnx"
+    calib_dir = root / "build" / "calib"
+    tasks_root = root / "build" / "magnetar_tasks"
     variants = {
         "encoder": onnx_dir / f"encoder-{args.chunk_tag}.sim.onnx",
         "decoder": onnx_dir / f"decoder-{args.chunk_tag}.sim.onnx",

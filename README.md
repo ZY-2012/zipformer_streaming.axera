@@ -51,6 +51,7 @@ Zipformer 流式中英双语 ASR 在 Axera AX650N 上的部署工程：
 | 平台 | Python | C++ | 状态 |
 |------|--------|-----|------|
 | AX650N | ✅ | ✅ | 板端实测 |
+| AX650N NPU1 | ✅ | ✅ | 单核备选（HF `models_npu1/`，多模型共存） |
 | AX630C | — | — | 未验证（Pulsar2 换 AX620E 目标后可复用源码） |
 
 ## 模型接口
@@ -178,10 +179,15 @@ python model_convert/prepare_calib.py \
   --wavs-dir <wav_dir> --output-dir build/calib --chunk-len 32 --t 39
 
 # 4) 生成 Magnetar 任务并量化
-python model_convert/prepare_tasks.py
+python model_convert/prepare_tasks.py                 # NPU3（默认）
+# python model_convert/prepare_tasks.py --npu-mode NPU1  # 单核备选
 MAGNETAR_ROOT=<path/to/Magnetar> python model_convert/compile_models.py \
   --models decoder,joiner,encoder
 ```
+
+> `prepare_tasks.py` 生成基础版：encoder U16、decoder FP32、joiner U16。
+> 发布的 D / NPU1 版本另把 encoder 的 attention key/value 投影和 `Mul` 设为
+> FP32（15 个优化后 FC 名），细节见 skill `streaming-zipformer-axera`。
 
 产物：`build/magnetar_tasks/<model>/compile/<model>.axmodel`。
 

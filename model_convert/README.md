@@ -74,10 +74,14 @@ python model_convert/prepare_calib.py \
 ## 4. 生成 Magnetar 任务并量化
 
 ```bash
-python model_convert/prepare_tasks.py
+python model_convert/prepare_tasks.py                    # NPU3（默认）
+# python model_convert/prepare_tasks.py --npu-mode NPU1   # 单核，多模型共存
 MAGNETAR_ROOT=<path/to/Magnetar> \
 python model_convert/compile_models.py --models decoder,joiner,encoder
 ```
+
+`--npu-mode` 支持 `NPU1/NPU2/NPU3`。NPU1 用于语音助手同时跑多个模型、
+避免三核资源抢占；精度与 NPU3 一致，延迟略高。
 
 每个子模型一个 task（`build/magnetar_tasks/<model>/`）：
 
@@ -90,11 +94,16 @@ Pulsar2 配置由 `prepare_tasks.py` 根据 ONNX 输入自动写入
 `build/magnetar_tasks/<model>/compile/custom_config.json`（`/workspace/...`
 是 Pulsar2 容器内路径）：
 
-| 模型 | 配置 |
-|------|------|
-| encoder | U16 激活 + S8 权重；attention key/value 投影 FP32 |
-| decoder | FP32（输出敏感） |
-| joiner | U16 + S8 |
+| 模型 | 默认生成（基础版） | 发布 D / NPU1 |
+|------|------|------|
+| encoder | U16 + S8 | 另加 attention key/value 投影 + `Mul` FP32 |
+| decoder | FP32（输出敏感） | 同左 |
+| joiner | U16 + S8 | 同左 |
+
+> attention FP32 使用 Pulsar2 优化后的 15 个 `FullyConnected` 名
+> （`op_...:onnx.FullyConnected`），来自首次编译的
+> `work/frontend/optimized.onnx`；换 ONNX/Pulsar2 版本时需要重新提取。
+> 详细两遍编译流程见 skill `streaming-zipformer-axera`。
 
 校准 `calibration_size=1024` 个真实 chunk。`enable_smooth_quant` 可开可关，
 在本模型上端到端输出一致；默认开启，可关闭以缩短编译时间。

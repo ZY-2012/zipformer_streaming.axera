@@ -49,7 +49,7 @@ def build_meta(model_name: str, onnx_path: Path) -> dict:
     }
 
 
-def build_config(onnx_path: Path, calib_dir_in_container: str = "/workspace/export/calib_data") -> dict:
+def build_config(onnx_path: Path, model_name: str, npu_mode: str = "NPU3", calib_dir_in_container: str = "/workspace/export/calib_data") -> dict:
     m = onnx.load(str(onnx_path))
     inits = {i.name for i in m.graph.initializer}
     inputs = [vi for vi in m.graph.input if vi.name not in inits]
@@ -66,9 +66,27 @@ def build_config(onnx_path: Path, calib_dir_in_container: str = "/workspace/expo
         }
         for vi in inputs
     ]
+    if model_name == "decoder":
+        layer_configs = [{
+            "start_tensor_names": ["DEFAULT"],
+            "end_tensor_names": ["DEFAULT"],
+            "data_type": "FP32",
+        }]
+    elif model_name == "joiner":
+        layer_configs = [{
+            "start_tensor_names": ["DEFAULT"],
+            "end_tensor_names": ["DEFAULT"],
+            "data_type": "U16",
+        }]
+    else:
+        layer_configs = [
+            {"start_tensor_names": ["DEFAULT"], "end_tensor_names": ["DEFAULT"],
+             "data_type": "U16"},
+            {"op_type": "Pow", "data_type": "U8"},
+        ]
     return {
         "model_type": "ONNX",
-        "npu_mode": "NPU3",
+        "npu_mode": npu_mode,
         "target_hardware": "AX650",
         "input": "/workspace/export/model.onnx",
         "output_name": "model.axmodel",
@@ -82,14 +100,7 @@ def build_config(onnx_path: Path, calib_dir_in_container: str = "/workspace/expo
         },
         "quant": {
             "input_configs": input_configs,
-            "layer_configs": [
-                {
-                    "start_tensor_names": ["DEFAULT"],
-                    "end_tensor_names": ["DEFAULT"],
-                    "data_type": "U16",
-                },
-                {"op_type": "Pow", "data_type": "U8"},
-            ],
+            "layer_configs": layer_configs,
             "calibration_method": "MinMax",
             "enable_smooth_quant": True,
             "conv_bias_data_type": "FP32",
@@ -117,6 +128,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=str(Path(__file__).resolve().parents[1]))
     ap.add_argument("--chunk-tag", default="chunk32")
+    ap.add_argument("--npu-mode", default="NPU3", choices=["NPU1", "NPU2", "NPU3"])
     args = ap.parse_args()
     root = Path(args.root)
     onnx_dir = root / "build" / "onnx"
@@ -140,7 +152,7 @@ def main() -> None:
         meta = build_meta(f"zipformer_streaming_{name}", dst)
         (task / "export" / "model_meta.json").write_text(
             json.dumps(meta, indent=2), encoding="utf-8")
-        cfg = build_config(dst)
+        cfg = build_config(dst, name, args.npu_mode)
         (task / "compile").mkdir(exist_ok=True)
         (task / "compile" / "custom_config.json").write_text(
             json.dumps(cfg, indent=2), encoding="utf-8")

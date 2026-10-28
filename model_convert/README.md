@@ -97,7 +97,7 @@ Pulsar2 配置由 `prepare_tasks.py` 根据 ONNX 输入自动写入
 | joiner | U16 + S8 |
 
 校准 `calibration_size=1024` 个真实 chunk。`enable_smooth_quant` 可开可关，
-在本模型上端到端输出一致；默认关闭以缩短编译时间。
+在本模型上端到端输出一致；默认开启，可关闭以缩短编译时间。
 
 ### 精度结论
 
